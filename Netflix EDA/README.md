@@ -94,6 +94,7 @@ Netflix EDA/
 │   ├── releases_by_year.png
 │   └── movies_duration_hist.png
 ├── catalog_diagnostics.py
+├── requirements.txt
 └── README.md
 ```
 
@@ -107,7 +108,7 @@ Netflix EDA/
 Para executar o diagnóstico localmente a partir da pasta `Netflix EDA`:
 
 ```bash
-pip install pandas matplotlib
+pip install -r requirements.txt
 python catalog_diagnostics.py
 ```
 
