@@ -37,6 +37,8 @@ media = df[coluna].mean()
 mediana = df[coluna].median()
 moda = df[coluna].mode()
 
+duracao_filmes = df.loc[df["type"] == "Movie", "duration_int"].dropna()
+
 #Medida de Dispersão
 desvio_padrao = df[coluna].std()
 
@@ -47,16 +49,18 @@ print(f"Moda: {moda.tolist()}")
 
 print(f"\nMedida de Dispersão: {desvio_padrao:.2f}")
 
-
-# 4. Visualização Gráfica
-
-# Evolução de lançamentos por ano
 lancamentos_por_ano = (
     df["release_year"]
     .value_counts()
     .sort_index()
 )
+media_filmes = duracao_filmes.mean()
+mediana_filmes = duracao_filmes.median()
 
+
+# 4. Visualização Gráfica
+
+# Evolução de lançamentos por ano
 plt.figure(figsize=(8, 4))
 plt.bar(lancamentos_por_ano.index, lancamentos_por_ano.values, color='darkblue')
 plt.title("Evolução de Lançamentos por ano")
@@ -65,14 +69,10 @@ plt.ylabel('Quantidade de Títulos')
 plt.xticks(range(1920, 2025, 10), rotation = 45)
 plt.grid(axis="y", linestyle='--', alpha=0.7)
 plt.tight_layout()
+plt.savefig("images/releases_by_year.png", dpi=150)
 plt.show()
 
 # Histograma de duração dos filmes
-duracao_filmes = df.loc[df["type"] == "Movie", "duration_int"].dropna()
-
-media_filmes = duracao_filmes.mean()
-mediana_filmes = duracao_filmes.median()
-
 plt.figure(figsize=(10,5))
 plt.hist(duracao_filmes, bins=range(0, 300, 10), color="steelblue", edgecolor="white")
 plt.axvline(media_filmes, color="red", linestyle="--", linewidth=1.8, label=f"Média: {media_filmes:.1f}min")
@@ -83,5 +83,6 @@ plt.ylabel("Quantidade de Filmes")
 plt.legend()
 plt.grid(axis="y", linestyle = "--", alpha=0.7)
 plt.tight_layout()
+plt.savefig("images/movies_duration_hist.png", dpi=150)
 plt.show()
 
