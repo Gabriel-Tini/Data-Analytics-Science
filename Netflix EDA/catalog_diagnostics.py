@@ -4,11 +4,16 @@ import matplotlib.pyplot as plt
 
 
 # 1. Carregamento dos dados
-data_path = Path("Dataset/netflix_titles.csv")
-df = pd.read_csv(data_path) 
+BASE_DIR = Path(__file__).resolve().parent
+data_path = BASE_DIR / "Dataset" / "netflix_titles.csv"
+images_dir = BASE_DIR / "images"
+images_dir.mkdir(exist_ok=True)
 
-if data_path.exists():
-    print("Arquivo carregado com sucesso!")
+if not data_path.exists():
+    raise FileNotFoundError(f"Arquivo não encontrado em: {data_path}")
+
+df = pd.read_csv(data_path)
+print("Arquivo carregado com sucesso!")
 
 
 # 2. Visualização geral dos dados
@@ -30,32 +35,29 @@ print(df[["duration", "duration_int", "duration_type"]].head())
 print("\nCategorias em duration_type:")
 print(df["duration_type"].value_counts(dropna=False))
 
-#Medidas de Tendência Central 
-coluna = "duration_int"
-
-media = df[coluna].mean()
-mediana = df[coluna].median()
-moda = df[coluna].mode()
-
+# Medidas de Tendência Central e Dispersão (apenas filmes, em minutos)
 duracao_filmes = df.loc[df["type"] == "Movie", "duration_int"].dropna()
 
-#Medida de Dispersão
-desvio_padrao = df[coluna].std()
+media = duracao_filmes.mean()
+mediana = duracao_filmes.median()
+moda = duracao_filmes.mode()
+desvio_padrao = duracao_filmes.std()
+minimo = duracao_filmes.min()
+maximo = duracao_filmes.max()
 
-print("\nMedidas de Tendência Central:")
+print("\nMedidas de Tendência Central (Filmes em minutos):")
 print(f"Média: {media:.2f}")
 print(f"Mediana: {mediana:.2f}")
 print(f"Moda: {moda.tolist()}")
+print(f"Mín / Máx: {minimo} / {maximo}")
 
-print(f"\nMedida de Dispersão: {desvio_padrao:.2f}")
+print(f"\nMedida de Dispersão (Desvio Padrão): {desvio_padrao:.2f}")
 
 lancamentos_por_ano = (
     df["release_year"]
     .value_counts()
     .sort_index()
 )
-media_filmes = duracao_filmes.mean()
-mediana_filmes = duracao_filmes.median()
 
 
 # 4. Visualização Gráfica
@@ -69,13 +71,13 @@ plt.ylabel('Quantidade de Títulos')
 plt.xticks(range(1920, 2025, 10), rotation = 45)
 plt.grid(axis="y", linestyle='--', alpha=0.7)
 plt.tight_layout()
-plt.savefig("images/releases_by_year.png", dpi=150)
+plt.savefig(images_dir / "releases_by_year.png", dpi=150)
 plt.show()
 
 # Histograma de duração dos filmes
 plt.figure(figsize=(10,5))
-plt.hist(duracao_filmes, bins=range(0, 300, 10), color="steelblue", edgecolor="white")
-plt.axvline(media_filmes, color="red", linestyle="--", linewidth=1.8, label=f"Média: {media_filmes:.1f}min")
+plt.hist(duracao_filmes, bins=range(0, 330, 10), color="steelblue", edgecolor="white")
+plt.axvline(media, color="red", linestyle="--", linewidth=1.8, label=f"Média: {media:.1f} min")
 
 plt.title("Distribuição da Duração dos Filmes na Netflix")
 plt.xlabel("Duração (minutos)")
@@ -83,6 +85,6 @@ plt.ylabel("Quantidade de Filmes")
 plt.legend()
 plt.grid(axis="y", linestyle = "--", alpha=0.7)
 plt.tight_layout()
-plt.savefig("images/movies_duration_hist.png", dpi=150)
+plt.savefig(images_dir / "movies_duration_hist.png", dpi=150)
 plt.show()
 

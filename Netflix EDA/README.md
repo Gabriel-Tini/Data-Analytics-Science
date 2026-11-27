@@ -17,7 +17,8 @@ Explorar o catálogo da Netflix a partir do dataset *Netflix Movies and TV Shows
 
 ## Sobre o Dataset
 
-* **Arquivo:** `Dataset/netflix_titles.csv` (*Netflix Movies and TV Shows*)
+* **Fonte:** [Netflix Movies and TV Shows — Kaggle](https://www.kaggle.com/datasets/shivamb/netflix-shows) (Shivam Bansal)
+* **Arquivo:** `Dataset/netflix_titles.csv`
 * **Dimensões:** `8.807` registros e `12` colunas
 * **Composição do catálogo:**
   * **Filmes (`Movie`):** `6.131` títulos (`69,6%`)
